@@ -22,6 +22,13 @@ export interface ServiceConfig {
 
     probe?      : boolean
     disableIPv6?: boolean
+    /**
+       * A list of allowed network interface names (IP Addresses not in these interfaces will not be published).
+       * @example ['eth0']
+       * The disableIPv6 option still applies
+       * By default, if the nwInterfaces is not specified or is empty, all non-internal network interfaces are published
+   */
+    nwInterfaces: string[]
 }
 
 export interface ServiceRecord {
@@ -51,6 +58,7 @@ export class Service extends EventEmitter {
     public addresses?   : Array<string>
     public referer?     : ServiceReferer
     public disableIPv6  : boolean
+    public nwInterfaces : Array<string>
     public lastSeen?    : number
     public ttl?         : number
 
@@ -80,6 +88,7 @@ export class Service extends EventEmitter {
         this.txt            = config.txt
         this.subtypes       = config.subtypes
         this.disableIPv6    = !!config.disableIPv6
+        this.nwInterfaces   = config.nwInterfaces
     }
 
 
@@ -92,11 +101,12 @@ export class Service extends EventEmitter {
         }
 
         // Create record per interface address
-        let ifaces  : Array<any> = Object.values(os.networkInterfaces())
+        let ifaces  : Array<any> = Object.entries(os.networkInterfaces())
         for(let iface of ifaces) {
-            let addrs : Array<os.NetworkInterfaceInfo> = iface
+            const [interfaceName, addrs] = iface
+            if (nwInterfaces?.length && nwInterfaces.includes(interfaceName)) continue
             for(let addr of addrs) {
-                if(addr.internal || addr.mac === '00:00:00:00:00:00') continue
+                if (addr.internal || addr.mac === '00:00:00:00:00:00') continue
                 switch(addr.family) {
                     case 'IPv4':
                         records.push(this.RecordA(this, addr.address))
