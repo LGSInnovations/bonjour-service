@@ -1,0 +1,45 @@
+image: node:latest
+
+stages:
+  - build
+  - package
+  - post
+
+
+# This folder is cached between builds
+# https://docs.gitlab.com/ee/ci/yaml/#cache
+cache:
+  paths:
+    - node_modules/ # Cache node_modules to speed up subsequent runs
+
+variables:
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm" # Define a cache directory for npm
+
+before_script:
+  - npm i --cache $NPM_CONFIG_CACHE --prefer-offline # Install dependencies using npm ci for cleaner installs
+
+build_typescript:
+  stage: build
+  script:
+    - npm run build # Assuming you have a "build" script in your package.json that runs tsc
+  artifacts:
+    paths:
+      - dist/ # Save the compiled output (e.g., JavaScript files) as artifacts
+    expire_in: 1 day # Define how long to keep the artifacts
+
+create_package:
+  stage: package
+  script:
+    - npm pack # Create a .tgz package from your project
+  artifacts:
+    paths:
+      - "*.tgz" # Save the generated package as an artifact
+    expire_in: 10 weeks # Define how long to keep the package artifact
+  dependencies:
+    - build_typescript # Ensure the build stage completes successfully before packaging
+
+deploy:
+  stage: post
+  script:
+    - npm run semantic-release
+
