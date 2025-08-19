@@ -23,6 +23,9 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   },
+  "publishConfig": {
+    "@WS-Zeroconf:registry": "https://gitlab.csde.caci.com/api/v4/projects/29360/packages/npm/"
+  },
   "scripts": {
     "test": "standard --fix && tape test/*.js",
     "build": "tsc --removeComments true",
