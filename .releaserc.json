@@ -1,5 +1,5 @@
 {
-	"branches": ["master"],
+	"branches": ["master", "nwInterfaces_release"],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
