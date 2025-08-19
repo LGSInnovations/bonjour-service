@@ -14,6 +14,7 @@ cache:
 
 variables:
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm" # Define a cache directory for npm
+  NPM_TOKEN: ${CI_JOB_TOKEN}
 
 before_script:
   - npm i --cache $NPM_CONFIG_CACHE --prefer-offline # Install dependencies using npm ci for cleaner installs
