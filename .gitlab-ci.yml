@@ -41,5 +41,6 @@ create_package:
 deploy:
   stage: post
   script:
+    - git fetch --unshallow --tags
     - npm run semantic-release
 
