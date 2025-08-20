@@ -23,7 +23,8 @@
     "test": "standard --fix && tape test/*.js",
     "build": "tsc --removeComments true",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
-    "example:simple": "node examples/simple"
+    "example:simple": "node examples/simple",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
