@@ -28,7 +28,7 @@ export interface ServiceConfig {
        * The disableIPv6 option still applies
        * By default, if the nwInterfaces is not specified or is empty, all non-internal network interfaces are published
    */
-    nwInterfaces: string[]
+    nwInterfaces?: string[]
 }
 
 export interface ServiceRecord {
