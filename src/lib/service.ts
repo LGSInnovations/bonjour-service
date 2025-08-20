@@ -104,7 +104,7 @@ export class Service extends EventEmitter {
         let ifaces  : Array<any> = Object.entries(os.networkInterfaces())
         for(let iface of ifaces) {
             const [interfaceName, addrs] = iface
-            if (this.nwInterfaces?.length && this.nwInterfaces.includes(interfaceName)) continue
+            if (this.nwInterfaces?.length && !this.nwInterfaces.includes(interfaceName)) continue
             for(let addr of addrs) {
                 if (addr.internal || addr.mac === '00:00:00:00:00:00') continue
                 switch(addr.family) {
